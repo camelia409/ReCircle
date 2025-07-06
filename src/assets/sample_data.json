@@ -1,0 +1,19 @@
+{
+  "users": [
+    {"id": 1, "role": "partner", "username": "ngo1", "password": "test", "name": "Community Aid", "location": "New York", "points": 150, "status": "approved"},
+    {"id": 2, "role": "partner", "username": "ngo2", "password": "test", "name": "Green Cycle", "location": "Chicago", "points": 100, "status": "approved"},
+    {"id": 3, "role": "customer", "username": "customer1", "password": "test", "name": "Jane Doe", "location": "New York", "points": 0, "status": "approved"},
+    {"id": 4, "role": "admin", "username": "admin1", "password": "test", "name": "Admin User", "location": "", "points": 0, "status": "approved"},
+    {"id": 5, "role": "partner", "username": "ngo3", "password": "test", "name": "Eco Warriors", "location": "Boston", "points": 0, "status": "pending"}
+  ],
+  "surplus_items": [
+    {"id": 1, "category": "Clothing", "description": "Men's T-Shirts, 50 units", "location": "New York", "quantity": 50, "status": "available", "source": "store"},
+    {"id": 2, "category": "Electronics", "description": "Bluetooth Headphones, 20 units", "location": "Chicago", "quantity": 20, "status": "available", "source": "store"},
+    {"id": 3, "category": "Food", "description": "Canned Goods, 100 units", "location": "New York", "quantity": 100, "status": "available", "source": "store"},
+    {"id": 4, "category": "Furniture", "description": "Chairs, 10 units", "location": "Chicago", "quantity": 10, "status": "available", "source": "customer"}
+  ],
+  "blockchain_logs": [
+    {"item_id": 1, "event": "listed", "timestamp": "2025-07-06T12:00:00", "partner_id": null},
+    {"item_id": 2, "event": "listed", "timestamp": "2025-07-06T12:00:00", "partner_id": null}
+  ]
+}
