@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, CheckCircle, Clock, Shield } from 'lucide-react';
+import { Users, CheckCircle, Clock, Shield, Search } from 'lucide-react';
 
 interface PendingPartner {
   id: number;
@@ -19,6 +19,7 @@ const AdminPanel: React.FC = () => {
   const [auditLog, setAuditLog] = useState<AuditEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [approving, setApproving] = useState<number | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     fetchPendingPartners();
@@ -99,6 +100,12 @@ const AdminPanel: React.FC = () => {
     return new Date(timestamp).toLocaleString();
   };
 
+  const filteredPartners = pendingPartners.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.location.toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) {
     return (
       <div className="space-y-8">
@@ -120,28 +127,29 @@ const AdminPanel: React.FC = () => {
           <Users className="h-6 w-6 text-orange-600 mr-3" />
           <h2 className="text-xl font-semibold text-gray-800">Pending Partner Approvals</h2>
         </div>
-
+        <div className="mb-4 flex items-center">
+          <Search className="h-5 w-5 text-blue-500 mr-2" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search by name or location..."
+            className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 border border-blue-200 rounded-lg">
+            <thead className="bg-blue-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Organization Name
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Location
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Action
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Organization Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Location</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {pendingPartners.map((partner) => (
-                <tr key={partner.id} className="hover:bg-gray-50 transition-colors">
+              {filteredPartners.map((partner) => (
+                <tr key={partner.id} className="hover:bg-blue-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{partner.name}</div>
                   </td>
@@ -178,8 +186,7 @@ const AdminPanel: React.FC = () => {
             </tbody>
           </table>
         </div>
-
-        {pendingPartners.length === 0 && (
+        {filteredPartners.length === 0 && (
           <div className="text-center py-8 text-gray-500">
             No pending partner approvals.
           </div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Recycle, User, Lock, AlertCircle } from 'lucide-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -19,6 +21,7 @@ const Login: React.FC = () => {
       await login(username, password, selectedRole);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
+      toast.error(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setLoading(false);
     }

@@ -10,30 +10,32 @@ const NotificationBanner: React.FC<NotificationBannerProps> = ({ partnerId }) =>
   const [dismissed, setDismissed] = useState<number[]>([]);
 
   useEffect(() => {
-    // Mock notifications for MVP - simulate new items in partner's location
-    const mockNotifications = [
-      {
-        id: 1,
-        message: "New electronics available in your area!",
-        type: "new_item",
-        location: "New York",
-        timestamp: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        message: "Clothing donation just added nearby",
-        type: "new_item", 
-        location: "New York",
-        timestamp: new Date().toISOString(),
-      }
-    ];
-
-    // Filter notifications based on partner location (mock logic)
-    if (partnerId === 1) { // Community Aid in New York
-      setNotifications(mockNotifications);
-    } else {
-      setNotifications([]);
-    }
+    // Simulate API call
+    const fetchNotifications = async () => {
+      // Replace with real API call if needed
+      // const response = await fetch(`${import.meta.env.VITE_API_URL}/api/notifications`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ partner_id: partnerId, item_id: 1 }) });
+      // const data = await response.json();
+      const data = [
+        {
+          id: 1,
+          message: "New electronics available in your area!",
+          type: "new_item",
+          location: "New York",
+          timestamp: new Date().toISOString(),
+        },
+        {
+          id: 2,
+          message: "Claim 10 items this month for a badge!",
+          type: "challenge",
+          progress: 5,
+          target: 10,
+          timestamp: new Date().toISOString(),
+        }
+      ];
+      setNotifications(data);
+      setTimeout(() => setDismissed((prev) => [...prev, 1]), 5000);
+    };
+    fetchNotifications();
   }, [partnerId]);
 
   const handleDismiss = (notificationId: number) => {
@@ -51,7 +53,7 @@ const NotificationBanner: React.FC<NotificationBannerProps> = ({ partnerId }) =>
       {visibleNotifications.map(notification => (
         <div
           key={notification.id}
-          className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between"
+          className="bg-blue-100 border border-blue-200 rounded-lg p-4 flex items-center justify-between shadow-sm"
         >
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -70,11 +72,26 @@ const NotificationBanner: React.FC<NotificationBannerProps> = ({ partnerId }) =>
                   {notification.location}
                 </p>
               </div>
+              {notification.type === 'challenge' && notification.progress !== undefined && (
+                <div className="mt-2">
+                  <div className="flex justify-between text-xs text-blue-600 mb-1">
+                    <span>Progress: {notification.progress}/{notification.target}</span>
+                    <span>{Math.round((notification.progress / notification.target) * 100)}%</span>
+                  </div>
+                  <div className="w-full bg-blue-200 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${(notification.progress / notification.target) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <button
             onClick={() => handleDismiss(notification.id)}
-            className="flex-shrink-0 ml-4 p-1 rounded-full hover:bg-blue-100 transition-colors"
+            className="flex-shrink-0 ml-4 p-1 rounded-full hover:bg-blue-200 transition-colors"
+            aria-label="Dismiss notification"
           >
             <X className="h-4 w-4 text-blue-600" />
           </button>

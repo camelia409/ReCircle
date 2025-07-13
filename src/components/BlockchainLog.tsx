@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Clock, User, Activity } from 'lucide-react';
+import { Shield, Clock, User, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BlockchainEntry {
   item_id: number;
@@ -16,6 +16,10 @@ const BlockchainLog: React.FC<BlockchainLogProps> = ({ itemId }) => {
   const [logs, setLogs] = useState<BlockchainEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [page, setPage] = useState(1);
+  const logsPerPage = 5;
+  const totalPages = Math.ceil(logs.length / logsPerPage);
+  const paginatedLogs = logs.slice((page - 1) * logsPerPage, page * logsPerPage);
 
   useEffect(() => {
     fetchBlockchainLog();
@@ -107,23 +111,17 @@ const BlockchainLog: React.FC<BlockchainLogProps> = ({ itemId }) => {
       )}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 border border-blue-200 rounded-lg">
+          <thead className="bg-blue-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Event
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Timestamp
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Partner ID
-              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Event</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Timestamp</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider border-b border-blue-200">Partner ID</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {logs.map((log, index) => (
-              <tr key={index} className="hover:bg-gray-50 transition-colors">
+            {paginatedLogs.map((log, index) => (
+              <tr key={index} className="hover:bg-blue-50 transition-colors">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     {getEventIcon(log.event)}
@@ -153,6 +151,31 @@ const BlockchainLog: React.FC<BlockchainLogProps> = ({ itemId }) => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {logs.length > logsPerPage && (
+        <div className="flex justify-end items-center mt-4 space-x-2">
+          <button
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-50"
+            aria-label="Previous page"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+          <span className="text-sm text-blue-800">
+            Page {page} of {totalPages}
+          </span>
+          <button
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 disabled:opacity-50"
+            aria-label="Next page"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      )}
 
       {logs.length === 0 && (
         <div className="text-center py-8 text-gray-500">

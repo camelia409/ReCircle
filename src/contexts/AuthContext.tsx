@@ -10,6 +10,12 @@ interface User {
   points: number;
   status: string;
   token: string;
+  badges: string[];
+  challenges: {
+    name: string;
+    target: number;
+    progress: number;
+  }[];
 }
 
 interface AuthContextType {
@@ -67,6 +73,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           points: user.points,
           status: user.status,
           token: `mock_token_${user.id}`,
+          badges: (user as any).badges || [],
+          challenges: (user as any).challenges || [],
         };
         setUser(userData);
         localStorage.setItem('recircle_user', JSON.stringify(userData));

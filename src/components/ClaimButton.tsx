@@ -42,9 +42,11 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ itemId, partnerId, onSuccess 
 
   if (claimed) {
     return (
-      <div className="flex items-center text-green-600 text-sm">
-        <Check className="h-4 w-4 mr-1" />
-        Claimed
+      <div className="flex items-center text-green-600 text-base font-semibold">
+        <div className="p-2 bg-green-100 rounded-lg mr-2">
+          <Check className="h-5 w-5" />
+        </div>
+        Claimed Successfully
       </div>
     );
   }
@@ -53,15 +55,18 @@ const ClaimButton: React.FC<ClaimButtonProps> = ({ itemId, partnerId, onSuccess 
     <button
       onClick={handleClaim}
       disabled={loading}
-      className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      className="inline-flex items-center px-6 py-3 border border-transparent text-base font-bold rounded-xl text-white bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 focus:outline-none focus:ring-4 focus:ring-blue-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg transform hover:scale-105"
     >
       {loading ? (
         <>
-          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+          <Loader2 className="h-5 w-5 mr-2 animate-spin" />
           Claiming...
         </>
       ) : (
-        'Claim Item'
+        <>
+          <Check className="h-5 w-5 mr-2" />
+          Claim Item
+        </>
       )}
     </button>
   );

@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Donation from './pages/Donation';
-import Admin from './pages/Admin';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
@@ -68,14 +67,6 @@ const App: React.FC = () => {
             element={
               <PrivateRoute allowedRoles={['customer']}>
                 <Donation />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin"
-            element={
-              <PrivateRoute allowedRoles={['admin']}>
-                <Admin />
               </PrivateRoute>
             }
           />

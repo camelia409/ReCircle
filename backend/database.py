@@ -52,6 +52,20 @@ def init_db():
         )
     """)
     
+    # Create badges table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS badges (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            partner_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            description TEXT NOT NULL,
+            earned BOOLEAN DEFAULT FALSE,
+            earned_at TIMESTAMP,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (partner_id) REFERENCES partners (id)
+        )
+    """)
+    
     conn.commit()
     conn.close()
     print("Database initialized successfully")
